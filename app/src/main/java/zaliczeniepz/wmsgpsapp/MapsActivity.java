@@ -1,5 +1,6 @@
 package zaliczeniepz.wmsgpsapp;
 
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 
@@ -22,6 +23,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+        FloatingActionButton myLocation = (FloatingActionButton) findViewById(R.id.mylocation_button);
+        myLocation.setOnClickListener(new MyLocationButton());
+
+        FloatingActionButton myJob = (FloatingActionButton) findViewById(R.id.myJob_button);
+        myJob.setOnClickListener(new MyJobButton());
     }
 
 
@@ -39,8 +46,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap = googleMap;
 
         // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(-34, 151);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        LatLng warsaw = new LatLng(52.257559, 20.983877);
+        mMap.addMarker(new MarkerOptions().position(warsaw).title("Marker in Warsaw"));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(warsaw));
+        mMap.animateCamera(CameraUpdateFactory.zoomTo(10), 2000, null);
     }
 }
