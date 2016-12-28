@@ -1,4 +1,6 @@
 <resources>
     <string name="app_name">WmsGpsApp</string>
-    <string name="title_activity_maps">Map</string>
+    <string name="title_activity_maps">WmsGpsApp</string>
+    <string name="network_warning">Network connection is not available</string>
+    <string name="No_permissions">No GPS or Network permission</string>
 </resources>
