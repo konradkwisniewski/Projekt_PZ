@@ -22,7 +22,7 @@ import zaliczeniepz.wmsgpsapp.R;
 
 public class LocationTracker implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
-    private final String TAG = LocationTracker.class.getSimpleName();
+    protected final String TAG = LocationTracker.class.getSimpleName();
 
     private GoogleApiClient googleApiClient;
     private LocationRequest locationRequest;

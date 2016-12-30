@@ -3,6 +3,7 @@ package zaliczeniepz.wmsgpsapp.LocationTracking;
 import android.content.Context;
 import android.graphics.Color;
 import android.location.Location;
+import android.util.Log;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.Circle;
@@ -34,7 +35,7 @@ public class LocationDrawer extends LocationTracker {
             }
         }
     }
-
+    
     public void initMapCircle(GoogleMap initMap) {
         this.setmMap(initMap);
 
