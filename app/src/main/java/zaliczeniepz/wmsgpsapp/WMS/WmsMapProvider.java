@@ -46,20 +46,23 @@ public class WmsMapProvider extends AsyncTask<URL, Void, Bitmap> {
 
         this.currentBoundingBox = boundingBox;
 
-        String maxX = Double.toString(boundingBox.southwest.latitude);
-        String maxY = Double.toString(boundingBox.southwest.longitude);
-        String minX = Double.toString(boundingBox.northeast.latitude);
-        String minY = Double.toString(boundingBox.northeast.longitude);
+        String minX = Double.toString(boundingBox.southwest.latitude);
+        String minY = Double.toString(boundingBox.southwest.longitude);
+        String maxX = Double.toString(boundingBox.northeast.latitude);
+        String maxY = Double.toString(boundingBox.northeast.longitude);
 
 
         try {
             URL url = new URL(this.wmsConnectionString +
-                    "LAYERS=OBSZARY_PROJEKTOW&STYLES=&SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&BBOX=" +
-                    minX + "," +
+                    "LAYERS=OBSZARY_PROJEKTOW,KSD&STYLES=&SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&BBOX=" +
                     minY + "," +
-                    maxX + "," +
-                    maxY +
-                    "&HEIGHT=" + this.screenH + "&WIDTH=" + this.screenW + "&INFO_FORMAT=text/html&SRS=EPSG:2178");
+                    minX + "," +
+                    maxY + "," +
+                    maxX +
+                    "&HEIGHT=" + this.screenH +
+                    "&WIDTH=" + this.screenW +
+                    "&INFO_FORMAT=text/html&SRS=EPSG:4326&transparent=true"
+            );
             Log.i(TAG, url.toString());
 
             return url;
@@ -109,8 +112,8 @@ public class WmsMapProvider extends AsyncTask<URL, Void, Bitmap> {
     }
 
     private synchronized void updateGroundOverlay(Bitmap layer) {
-        this.groundOverlay.setImage(BitmapDescriptorFactory.fromBitmap(layer));
-        this.groundOverlay.setPositionFromBounds(this.currentBoundingBox);
+        this.groundOverlay.remove();
+        this.initGroundOverlay(layer);
     }
 
 

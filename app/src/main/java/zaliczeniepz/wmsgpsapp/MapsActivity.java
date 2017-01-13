@@ -6,6 +6,7 @@ import android.graphics.Point;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Display;
 import android.view.View;
 import android.widget.Toast;
@@ -19,7 +20,7 @@ import zaliczeniepz.wmsgpsapp.WMS.WmsMapProvider;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleMap.OnCameraIdleListener {
 
-    private final String LOG_TAG = MapsActivity.class.getSimpleName();
+    private final String TAG = MapsActivity.class.getSimpleName();
 
     private GoogleMap mMap;
     private FloatingActionButton myLocationButton;
@@ -89,8 +90,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     @Override
     public void onCameraIdle() {
-        WmsMapProvider tempWmsMapProvider = new WmsMapProvider(this.mMap, this.screenWidth, this.screenHeight);
-        tempWmsMapProvider.execute(tempWmsMapProvider.getMapUrl(mMap.getProjection().getVisibleRegion().latLngBounds));
+        Log.i(this.TAG, "Current zoom:" + this.mMap.getCameraPosition().zoom);
+        if (this.mMap.getCameraPosition().zoom > 10) {
+            WmsMapProvider tempWmsMapProvider = new WmsMapProvider(this.mMap, this.screenWidth, this.screenHeight);
+            tempWmsMapProvider.execute(tempWmsMapProvider.getMapUrl(mMap.getProjection().getVisibleRegion().latLngBounds));
+        }
     }
 
     @Override
