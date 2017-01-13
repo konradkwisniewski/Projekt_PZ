@@ -10,14 +10,14 @@ import com.google.android.gms.maps.model.LatLng;
 import zaliczeniepz.wmsgpsapp.LocationTracking.LocationDrawer;
 
 
-class MyLocationButtonListiner implements View.OnClickListener {
+class MyLocationButtonListener implements View.OnClickListener {
 
-    private static final String TAG = MyLocationButtonListiner.class.getSimpleName();
+    private static final String TAG = MyLocationButtonListener.class.getSimpleName();
 
     private GoogleMap mMap;
     private LocationDrawer locationDrawer;
 
-    MyLocationButtonListiner(GoogleMap initGoogleMap, LocationDrawer initLocationDrawer) {
+    MyLocationButtonListener(GoogleMap initGoogleMap, LocationDrawer initLocationDrawer) {
         this.locationDrawer = initLocationDrawer;
         this.mMap = initGoogleMap;
     }

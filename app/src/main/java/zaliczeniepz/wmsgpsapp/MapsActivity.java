@@ -82,7 +82,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         this.locationDrawer.initMapCircle(this.mMap);
 
-        this.myLocationButton.setOnClickListener(new MyLocationButtonListiner(this.mMap, this.locationDrawer));
+        this.myLocationButton.setOnClickListener(new MyLocationButtonListener(this.mMap, this.locationDrawer));
 
         if (!this.permissionChecker.isNetworkPermissionGranted())
             Toast.makeText(this, R.string.network_warning, Toast.LENGTH_LONG).show();
