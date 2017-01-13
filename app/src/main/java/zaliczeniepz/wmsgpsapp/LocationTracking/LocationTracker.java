@@ -16,21 +16,20 @@ import com.google.android.gms.location.LocationServices;
 
 import zaliczeniepz.wmsgpsapp.R;
 
-/**
- * Created by Lenovo on 2016-12-30.
- */
+
 
 public class LocationTracker implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
-    protected final String TAG = LocationTracker.class.getSimpleName();
+    private final String TAG = LocationTracker.class.getSimpleName();
+    private boolean connected = false;
 
     private GoogleApiClient googleApiClient;
     private LocationRequest locationRequest;
     private Context context;
 
-    protected Location currentLocation;
+    private Location currentLocation;
 
-    public LocationTracker(Context initContext) {
+    LocationTracker(Context initContext) {
         this.context = initContext;
 
         this.googleApiClient = new GoogleApiClient.Builder(context)
@@ -57,24 +56,30 @@ public class LocationTracker implements GoogleApiClient.ConnectionCallbacks, Goo
         this.locationRequest = new LocationRequest();
         this.locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         this.locationRequest.setInterval(1000);
-        Location location = null;
         try {
             LocationServices.FusedLocationApi.requestLocationUpdates(this.googleApiClient, this.locationRequest, this);
-            location = LocationServices.FusedLocationApi.getLastLocation(this.googleApiClient);
+            LocationServices.FusedLocationApi.getLastLocation(this.googleApiClient);
+            this.connected = true;
         } catch (SecurityException exc) {
             Toast.makeText(this.context, R.string.No_permissions, Toast.LENGTH_LONG).show();
         }
 
     }
 
+    public boolean isConnected(){
+        return this.connected;
+    }
+
     @Override
     public void onConnectionSuspended(int i) {
         Log.i(this.TAG, "Connection suspended");
         this.googleApiClient.connect();
+        this.connected = false;
     }
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+        this.connected = false;
         Log.i(this.TAG, " Connection failed");
     }
 

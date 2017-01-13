@@ -2,9 +2,12 @@ package zaliczeniepz.wmsgpsapp;
 
 import android.content.Intent;
 
+import android.graphics.Point;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.Display;
 import android.view.View;
 import android.widget.Toast;
 
@@ -13,10 +16,11 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 
 import zaliczeniepz.wmsgpsapp.LocationTracking.LocationDrawer;
+import zaliczeniepz.wmsgpsapp.WMS.WmsMapProvider;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
+public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleMap.OnCameraIdleListener {
 
-    private final String LOG_TAG = MapsActivity.class.getSimpleName();
+    private final String TAG = MapsActivity.class.getSimpleName();
 
     private GoogleMap mMap;
     private FloatingActionButton myLocationButton;
@@ -24,6 +28,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private PermissionChecker permissionChecker;
 
     private LocationDrawer locationDrawer;
+
+    private int screenWidth;
+    private int screenHeight;
 
     private boolean isMapReady = false;
 
@@ -48,6 +55,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         this.myLocationButton = (FloatingActionButton) findViewById(R.id.myLocation_button);
 
+        Display display = getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        this.screenWidth = size.x;
+        this.screenHeight = size.y;
+
     }
 
 
@@ -65,12 +78,23 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         this.mMap = googleMap;
         this.isMapReady = true;
 
+        this.mMap.setOnCameraIdleListener(this);
+
         this.locationDrawer.initMapCircle(this.mMap);
 
         this.myLocationButton.setOnClickListener(new MyLocationButtonListiner(this.mMap, this.locationDrawer));
 
         if (!this.permissionChecker.isNetworkPermissionGranted())
             Toast.makeText(this, R.string.network_warning, Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onCameraIdle() {
+        Log.i(this.TAG, "Current zoom:" + this.mMap.getCameraPosition().zoom);
+        if (this.mMap.getCameraPosition().zoom > 10) {
+            WmsMapProvider tempWmsMapProvider = new WmsMapProvider(this.mMap, this.screenWidth, this.screenHeight);
+            tempWmsMapProvider.execute(tempWmsMapProvider.getMapUrl(mMap.getProjection().getVisibleRegion().latLngBounds));
+        }
     }
 
     @Override
