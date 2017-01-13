@@ -18,7 +18,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import zaliczeniepz.wmsgpsapp.LocationTracking.LocationDrawer;
 import zaliczeniepz.wmsgpsapp.WMS.WmsMapProvider;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleMap.OnCameraIdleListener {
+public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleMap.OnCameraIdleListener, GoogleMap.OnCameraMoveStartedListener {
 
     private final String TAG = MapsActivity.class.getSimpleName();
 
@@ -79,14 +79,17 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         this.isMapReady = true;
 
         this.mMap.setOnCameraIdleListener(this);
+        this.mMap.setOnCameraMoveStartedListener(this);
 
         this.locationDrawer.initMapCircle(this.mMap);
 
-        this.myLocationButton.setOnClickListener(new MyLocationButtonListener(this.mMap, this.locationDrawer));
+        this.myLocationButton.setOnClickListener(new TrackingButtonListener(this.mMap, this.locationDrawer, this));
 
         if (!this.permissionChecker.isNetworkPermissionGranted())
             Toast.makeText(this, R.string.network_warning, Toast.LENGTH_LONG).show();
+
     }
+
 
     @Override
     public void onCameraIdle() {
@@ -107,6 +110,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     protected void onStop() {
         this.locationDrawer.stop();
         super.onStop();
+    }
+
+    @Override
+    public void onCameraMoveStarted(int i) {
+        this.locationDrawer.setTracingEnabled(false);
+        Toast.makeText(this, "Position tracking disabled", Toast.LENGTH_SHORT).show();
     }
 
 }
